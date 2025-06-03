@@ -1,0 +1,70 @@
+<section class="signup-wrapper">
+  <div class="signup-container">
+    <div class="signup-header">
+      <h2 class="signup-title">Crear cuenta</h2>
+      <p class="signup-subtitle">Ingresa tus datos para registrarte</p>
+    </div>
+
+    <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()" class="signup-form">
+      <div class="input-group">
+        <label for="nombre">Nombre de usuario</label>
+        <input
+          type="text"
+          id="nombre"
+          formControlName="nombre"
+          placeholder="Tu nombre"
+        />
+        <div class="error" *ngIf="signUpForm.get('nombre')?.invalid && signUpForm.get('nombre')?.touched">
+          El nombre es obligatorio
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label for="email">Correo electrónico</label>
+        <input
+          type="email"
+          id="email"
+          formControlName="email"
+          placeholder="ejemplo@correo.com"
+        />
+        <div class="error" *ngIf="signUpForm.get('email')?.invalid && signUpForm.get('email')?.touched">
+          El correo es inválido
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label for="password">Contraseña</label>
+        <input
+          type="password"
+          id="password"
+          formControlName="password"
+          placeholder="********"
+        />
+        <div class="error" *ngIf="signUpForm.get('password')?.invalid && signUpForm.get('password')?.touched">
+          La contraseña es obligatoria
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label for="rol">Tipo de usuario</label>
+        <select id="rol" formControlName="rol">
+          <option value="">Seleccione una opción</option>
+          <option value="ADMIN">Administrador</option>
+          <option value="CIUDADANO">Ciudadano</option>
+          <option value="EMPRESA_VIGILADA">Empresa Vigilada</option>
+        </select>
+        <div class="error" *ngIf="signUpForm.get('rol')?.invalid && signUpForm.get('rol')?.touched">
+          Debes seleccionar un rol
+        </div>
+      </div>
+
+      <button type="submit" class="btn-signup" [disabled]="signUpForm.invalid">
+        Registrarse
+      </button>
+
+      <div class="signup-footer">
+        <p>¿Ya tienes cuenta? <a routerLink="/login">Inicia sesión</a></p>
+      </div>
+    </form>
+  </div>
+</section>

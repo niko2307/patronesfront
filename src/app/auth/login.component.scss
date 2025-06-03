@@ -1,0 +1,139 @@
+.login-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(145deg, #0f2027, #203a43, #2c5364);
+  padding: 2rem;
+
+  .login-container {
+    background: #1e1e2f;
+    border-radius: 16px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+    color: #fff;
+    transition: all 0.3s ease;
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 2rem;
+
+      .login-logo {
+        max-width: 100px;
+        margin-bottom: 1rem;
+      }
+
+      .login-title {
+        font-size: 1.8rem;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+      }
+
+      .login-subtitle {
+        font-size: 1rem;
+        color: #aaa;
+      }
+    }
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+
+      .input-group {
+        display: flex;
+        flex-direction: column;
+
+        label {
+          margin-bottom: 0.4rem;
+          font-size: 0.9rem;
+          color: #ccc;
+        }
+
+        input {
+          padding: 0.8rem 1rem;
+          border-radius: 8px;
+          border: none;
+          background: #2c2f48;
+          color: #fff;
+          font-size: 1rem;
+
+          &:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px #6fc3df;
+          }
+        }
+
+        .error {
+          font-size: 0.8rem;
+          color: #ff5e5e;
+          margin-top: 0.3rem;
+        }
+      }
+
+      .btn-login {
+        padding: 0.8rem;
+        background-color: #6fc3df;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: bold;
+        color: #0f2027;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: #57b3cc;
+        }
+
+        &:disabled {
+          background-color: #3b4d5c;
+          cursor: not-allowed;
+        }
+      }
+
+      .login-footer {
+        text-align: center;
+        margin-top: 1rem;
+        font-size: 0.9rem;
+
+        a {
+          color: #6fc3df;
+          text-decoration: none;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Media Queries
+@media (max-width: 768px) {
+  .login-container {
+    padding: 1.5rem;
+    max-width: 90%;
+  }
+
+  .login-title {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-title {
+    font-size: 1.3rem;
+  }
+
+  .login-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .btn-login {
+    font-size: 0.95rem;
+  }
+}

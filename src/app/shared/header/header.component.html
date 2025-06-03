@@ -1,0 +1,14 @@
+<header class="navbar" [ngClass]="{ scrolled: scrolled }">
+  <div class="navbar__inner">
+    <div class="navbar__logo">
+      <img src="/public/logo.png" alt="Logo de la empresa" />
+
+      <span class="navbar__title">MiEmpresa</span>
+    </div>
+
+    <nav class="navbar__links">
+      <a routerLink="/login" routerLinkActive="active">Login</a>
+      <a routerLink="/register" routerLinkActive="active">Sign Up</a>
+    </nav>
+  </div>
+</header>

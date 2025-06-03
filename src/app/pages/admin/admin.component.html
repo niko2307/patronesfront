@@ -1,0 +1,62 @@
+<section class="admin-dashboard">
+  <header class="admin-header">
+    <button class="menu-toggle" (click)="toggleMenu()">☰</button>
+    <h1>Panel de Administración</h1>
+  </header>
+
+  <nav class="admin-menu" [class.open]="menuOpen">
+    <button (click)="cambiarSeccion('usuarios')">Usuarios</button>
+    <button (click)="cambiarSeccion('empresas')">Empresas</button>
+    <button (click)="cambiarSeccion('quejas')">Quejas</button>
+  </nav>
+
+  <div class="admin-content">
+    <section *ngIf="activeSection === 'usuarios'">
+      <h2 class="section-title">Usuarios</h2>
+      <ul>
+        <li *ngFor="let usuario of usuarios">
+          {{ usuario.nombre }} - {{ usuario.email }} - {{ usuario.rol }}
+        </li>
+      </ul>
+    </section>
+
+    <section *ngIf="activeSection === 'empresas'">
+      <h2 class="section-title">Empresas Vigiladas</h2>
+      <ul>
+        <li *ngFor="let empresa of empresas">
+          {{ empresa.nombre }} - {{ empresa.sector }}
+        </li>
+      </ul>
+
+      <form (ngSubmit)="registrarEmpresa()" #empresaForm="ngForm">
+        <input type="text" placeholder="Nombre" [(ngModel)]="nuevaEmpresa.nombre" name="nombre" required>
+        <input type="text" placeholder="Sector" [(ngModel)]="nuevaEmpresa.direccion" name="sector" required>
+        <button type="submit">Registrar Empresa</button>
+      </form>
+    </section>
+
+    <section *ngIf="activeSection === 'quejas'">
+      <h2 class="section-title">Quejas Registradas</h2>
+      <ul>
+        <li *ngFor="let queja of quejas">
+          {{ queja.descripcion }} - Estado: 
+          <select [(ngModel)]="queja.estado" (change)="cambiarEstadoQueja(queja.id, queja.estado)" name="estado">
+            <option value="PENDIENTE">Pendiente</option>
+            <option value="EN_PROCESO">En Proceso</option>
+            <option value="RESUELTA">Resuelta</option>
+          </select>
+          <button (click)="cargarHistorialPorQueja(queja.id)">Ver Historial</button>
+        </li>
+      </ul>
+
+      <div *ngIf="historial.length">
+        <h3>Historial de la queja</h3>
+        <ul>
+          <li *ngFor="let item of historial">
+            {{ item.descripcion }} - Fecha: {{ item.fecha }}
+          </li>
+        </ul>
+      </div>
+    </section>
+  </div>
+</section>
