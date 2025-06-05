@@ -1,0 +1,63 @@
+<div class="ciudadano-wrapper">
+  <div *ngIf="mostrarToast" class="toast">
+    {{ mensajeExito }}
+  </div>
+
+  <nav class="ciudadano-menu">
+    <button (click)="cambiarSeccion('registrar')" [class.active]="activeSection === 'registrar'">Registrar Queja</button>
+    <button (click)="cambiarSeccion('mis-quejas')" [class.active]="activeSection === 'mis-quejas'">Mis Quejas</button>
+    <button (click)="cerrarSesion()" class="logout-btn">Cerrar Sesión</button>
+  </nav>
+
+  <!-- Sección: Registrar queja -->
+  <section *ngIf="activeSection === 'registrar'" class="seccion-activa">
+    <h2>Registrar Queja</h2>
+    <form (ngSubmit)="registrarQueja()">
+      <textarea
+        [(ngModel)]="nuevaQueja.descripcion"
+        name="descripcion"
+        required
+        placeholder="Descripción del problema">
+      </textarea>
+
+      <select [(ngModel)]="nuevaQueja.empresaId" name="empresaId" required>
+        <option disabled selected value="">Seleccione una empresa</option>
+        <option *ngFor="let empresa of empresas" [value]="empresa.id">
+          {{ empresa.nombre }} ({{ empresa.tipoServicio }})
+        </option>
+      </select>
+
+      <button type="submit">Enviar Queja</button>
+    </form>
+  </section>
+
+  <!-- Sección: Mis quejas -->
+  <section *ngIf="activeSection === 'mis-quejas'" class="seccion-activa">
+    <h2>Mis Quejas</h2>
+
+    <ul class="queja-lista" *ngIf="quejas.length > 0">
+      <li *ngFor="let q of quejas">
+        <div>
+          <p><strong>{{ q.descripcion }}</strong></p>
+          <p><strong>Ruta:</strong> <span class="highlight">{{ q.rutaAsignada || 'Pendiente' }}</span></p>
+          <p><strong>Vencimiento:</strong> {{ q.vencimiento | date:'short' }}</p>
+        </div>
+        <button (click)="verHistorial(q.id)">Ver Historial</button>
+      </li>
+    </ul>
+
+    <div *ngIf="quejas.length === 0">
+      <p class="empty">No has registrado quejas aún.</p>
+    </div>
+
+    <div *ngIf="historial.length">
+      <h3>Historial de la Queja</h3>
+      <ul class="historial-lista">
+        <li *ngFor="let h of historial">
+          Estado: {{ h.estadoAnterior }} → {{ h.estadoNuevo }}<br />
+          Fecha: {{ h.fechaCambio | date:'short' }}
+        </li>
+      </ul>
+    </div>
+  </section>
+</div>

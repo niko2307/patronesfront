@@ -28,7 +28,7 @@ export class SignUpComponent implements OnInit, AfterViewInit {
       nombre: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
-      rol: ['', Validators.required] // Cambio: antes era tipoUsuario
+      rol: ['', Validators.required] // 'ADMIN', 'CIUDADANO', 'EMPRESA_VIGILADA'
     });
 
     if (typeof window !== 'undefined') {
@@ -60,14 +60,16 @@ export class SignUpComponent implements OnInit, AfterViewInit {
 
     const { nombre, email, password, rol } = this.signUpForm.value;
 
-    this.authService.register({ nombre , email, password, rol }).subscribe({
+    this.authService.register({ nombre, email, password, rol }).subscribe({
       next: (res) => {
         localStorage.setItem('token', res.token);
-        const role = localStorage.getItem('role');
-if (role === 'ADMIN') this.router.navigate(['/admin']);
-else if (role === 'CIUDADANO') this.router.navigate(['/ciudadano']);
-else if (role === 'EMPRESA_VIGILADA') this.router.navigate(['/empresa']);
-else this.router.navigate(['/login']);
+        localStorage.setItem('userId', res.userId.toString());
+        localStorage.setItem('role', res.rol);
+
+        if (res.rol === 'ADMIN') this.router.navigate(['/admin']);
+        else if (res.rol === 'CIUDADANO') this.router.navigate(['/ciudadano']);
+        else if (res.rol === 'EMPRESA_VIGILADA') this.router.navigate(['/empresa']);
+        else this.router.navigate(['/login']);
       },
       error: (err) => {
         this.errorMessage = err.message || 'Error durante el registro';

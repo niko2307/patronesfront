@@ -8,48 +8,75 @@
     <button (click)="cambiarSeccion('usuarios')">Usuarios</button>
     <button (click)="cambiarSeccion('empresas')">Empresas</button>
     <button (click)="cambiarSeccion('quejas')">Quejas</button>
+    <button (click)="cambiarSeccion('agrupadas')">Agrupadas</button>
+    <button (click)="cerrarSesion()" class="logout-btn">Cerrar Sesión</button>
   </nav>
 
   <div class="admin-content">
+
+    <!-- Usuarios -->
     <section *ngIf="activeSection === 'usuarios'">
-      <h2 class="section-title">Usuarios</h2>
-      <ul>
+      <h2 class="section-title">Buscar Usuario</h2>
+      <form (submit)="buscarUsuario()">
+        <input type="email" [(ngModel)]="emailBusqueda" name="emailBusqueda" placeholder="Correo del usuario" required />
+        <button type="submit">Buscar</button>
+      </form>
+
+      <ul *ngIf="usuarios.length">
         <li *ngFor="let usuario of usuarios">
           {{ usuario.nombre }} - {{ usuario.email }} - {{ usuario.rol }}
         </li>
       </ul>
     </section>
 
+    <!-- Empresas -->
     <section *ngIf="activeSection === 'empresas'">
       <h2 class="section-title">Empresas Vigiladas</h2>
       <ul>
         <li *ngFor="let empresa of empresas">
-          {{ empresa.nombre }} - {{ empresa.sector }}
+          {{ empresa.nombre }} - Tipo Servicio: {{ empresa.tipoServicio }}
         </li>
       </ul>
 
       <form (ngSubmit)="registrarEmpresa()" #empresaForm="ngForm">
-        <input type="text" placeholder="Nombre" [(ngModel)]="nuevaEmpresa.nombre" name="nombre" required>
-        <input type="text" placeholder="Sector" [(ngModel)]="nuevaEmpresa.direccion" name="sector" required>
+        <input type="text" placeholder="Nombre de la empresa" [(ngModel)]="nuevaEmpresa.nombre" name="nombre" required>
+        <input type="text" placeholder="Tipo de servicio" [(ngModel)]="nuevaEmpresa.tipoServicio" name="tipoServicio" required>
         <button type="submit">Registrar Empresa</button>
       </form>
     </section>
 
+    <!-- Quejas -->
     <section *ngIf="activeSection === 'quejas'">
-      <h2 class="section-title">Quejas Registradas</h2>
-      <ul>
+      <h2 class="section-title">Filtrar Quejas por Estado</h2>
+
+      <label for="estado-select">Estado:</label>
+      <select id="estado-select" [(ngModel)]="estadoSeleccionado" (change)="filtrarPorEstado()" name="estado">
+        <option value="ACTIVA">Activa</option>
+        <option value="EN_PROCESO">En Proceso</option>
+        <option value="RESUELTA">Resuelta</option>
+        <option value="VENCIDA">Vencida</option>
+      </select>
+
+      <ul *ngIf="quejas.length > 0">
         <li *ngFor="let queja of quejas">
-          {{ queja.descripcion }} - Estado: 
-          <select [(ngModel)]="queja.estado" (change)="cambiarEstadoQueja(queja.id, queja.estado)" name="estado">
-            <option value="PENDIENTE">Pendiente</option>
+          <p><strong>{{ queja.descripcion }}</strong></p>
+          <p>Estado actual:</p>
+          <select [(ngModel)]="queja.estado" (change)="cambiarEstadoQueja(queja.id, queja.estado)" name="estado-{{ queja.id }}">
+            <option value="ACTIVA">Activa</option>
             <option value="EN_PROCESO">En Proceso</option>
             <option value="RESUELTA">Resuelta</option>
+            <option value="VENCIDA">Vencida</option>
           </select>
+          <br />
           <button (click)="cargarHistorialPorQueja(queja.id)">Ver Historial</button>
         </li>
       </ul>
 
-      <div *ngIf="historial.length">
+      <div *ngIf="quejas.length === 0">
+        <p>No se encontraron quejas con el estado seleccionado.</p>
+      </div>
+
+      <div *ngIf="historial.length > 0">
         <h3>Historial de la queja</h3>
         <ul>
           <li *ngFor="let item of historial">
@@ -58,5 +85,24 @@
         </ul>
       </div>
     </section>
+
+    <!-- Quejas Agrupadas -->
+    <section *ngIf="activeSection === 'agrupadas'">
+  <h2 class="section-title">Quejas Agrupadas por Empresa</h2>
+
+  <label for="empresa-select">Seleccionar Empresa:</label>
+  <select id="empresa-select" [(ngModel)]="empresaSeleccionada">
+    <option *ngFor="let e of empresasUnicas" [value]="e">{{ e }}</option>
+  </select>
+
+  <ul *ngIf="quejasAgrupadas.length > 0">
+   <li *ngFor="let q of quejasFiltradasPorEmpresa">
+    <strong>{{ q.descripcion }}</strong><br />
+    Estado: {{ q.estado }}<br />
+    Fecha: {{ q.fechaRegistro | date:'short' }}<br />
+     </li>
+  </ul>
+</section>
+
   </div>
 </section>

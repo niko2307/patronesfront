@@ -20,16 +20,17 @@ export class AdminService {
     return this.http.get<any[]>(`${this.baseUrl}/empresas`);
   }
 
-  // Registrar una nueva empresa
-  registrarEmpresa(data: any): Observable<any> {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post<any>(`${this.baseUrl}/empresas/registrar`, data, { headers });
-  }
+ 
+ // Registrar una nueva empresa
+registrarEmpresa(data: { nombre: string, tipoServicio: string }): Observable<any> {
+  const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+  return this.http.post<any>(`${this.baseUrl}/empresas/registrar`, data, { headers });
+}
 
-  // Obtener todas las quejas
-  getQuejas(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/quejas`);
-  }
+ getQuejasPorEstado(estado: string): Observable<any[]> {
+  return this.http.get<any[]>(`${this.baseUrl}/quejas/estado?estado=${estado}`);
+}
+
 
   // Obtener queja por ID
   getQuejaPorId(id: number): Observable<any> {
@@ -52,4 +53,8 @@ export class AdminService {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.post(`${this.baseUrl}/historial/registrar`, data, { headers });
   }
+  getQuejasAgrupadasPorEmpresa(): Observable<any[]> {
+  return this.http.get<any[]>(`${this.baseUrl}/composite/por-empresa`);
+}
+
 }
